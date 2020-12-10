@@ -49,7 +49,7 @@ def START():
         raise ValueError
 
 
-def GET_LIST_EVENTS():  # НЕОБЯЗАТЕЛЬНАЯ ФУНКЦИЯ
+def GET_LIST_EVENTS():
     try:
         get_url_master = driver.current_url  # Получаю url страницы где список всех текущих событий в LIVE
         url = requests.get(get_url_master).text
@@ -81,7 +81,7 @@ def GET_MATCH(num):
         elem.click()
     except (NoSuchElementException, StaleElementReferenceException, ElementNotInteractableException,
             InvalidSessionIdException, WebDriverException):
-        print('У нас возникла ошибка из семейства WebDriverException в GET_MATCH, пропускаю этот Match_Id'),
+        print('WebDriverException: в GET_MATCH, пропускаю этот Match_Id'),
         raise ValueError
 
 # -----------------------------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ def get_event_id():  # tree_id == get_event_id, могу получить это
         return tree_id
     except (NoSuchElementException, StaleElementReferenceException, ElementNotInteractableException,
             InvalidSessionIdException, WebDriverException, IndexError):
-        print('У нас возникла ошибка из семейства WebDriverException в get_event_id, пропускаю этот Match_Id')
+        print('WebDriverException: в get_event_id, пропускаю этот Match_Id')
     raise ValueError
 
 
@@ -108,7 +108,7 @@ def get_data_selection_key():
         return element
     except (NoSuchElementException, StaleElementReferenceException, ElementNotInteractableException,
             InvalidSessionIdException, WebDriverException, IndexError):
-        print('У нас возникла ошибка из семейства WebDriverException в get_data_selection_key, пропускаю этот Match_Id')
+        print('WebDriverException: в get_data_selection_key, пропускаю этот Match_Id')
     raise ValueError
 
 
@@ -127,7 +127,7 @@ def get_odd_total():  # ПОЛУЧАЮ КОЭФ ТОТАЛ 2.5 МЕНЬШЕ (В�
                 odd_span = i['data-selection-price']
                 return float(odd_span)
     except (NoSuchElementException, StaleElementReferenceException, ElementNotInteractableException, InvalidSessionIdException, WebDriverException, IndexError):
-        print('У нас возникла ошибка из семейства WebDriverException в get_odd_total, пропускаю этот Match_Id')
+        print('WebDriverException: в get_odd_total, пропускаю этот Match_Id')
         raise ValueError
 # -----------------------------------------------------------------------------------------------------------
 
@@ -231,7 +231,7 @@ def CYCLE_MASTER():
 
         except (NoSuchElementException, StaleElementReferenceException, ElementNotInteractableException,
                  InvalidSessionIdException, WebDriverException, IndexError, TypeError):
-            print('У нас возникла ошибка из семейства WebDriverException в CYCLE_MASTER, пропускаю этот Match_Id'), db.testcollection.insert_one({str(datetime.now()):str('Ставка не прошла')})
+            print('WebDriverException: в CYCLE_MASTER, пропускаю этот Match_Id'), db.testcollection.insert_one({str(datetime.now()):str('Ставка не прошла')})
             raise ValueError
 
 
