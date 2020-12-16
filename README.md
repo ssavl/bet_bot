@@ -7,3 +7,5 @@ my final graduate work in #learnpython courses | Selenium+BS4+MongoDB
 - Асинхронность 
 - Возможность ставить другие маркеты
 - Новые букмейкерские конторы
+- Возможность общаться с сайтами букмейкером через HTTP запросы, а не через Selenium
+
