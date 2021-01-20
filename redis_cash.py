@@ -35,6 +35,7 @@ odd_p_1 = json.loads(coupons[0].find_all('td', {'class': 'price height-column-wi
 odd_p_2 = json.loads(coupons[0].find_all('td', {'class': 'price height-column-with-price coupone-width-1'})[0]['data-sel'])['epr']  # отсюда можно вытащить все коэфициенты
 
 step = 0
+
 for coupon in coupons:
 
     id_ = coupon['data-event-treeid']
@@ -43,8 +44,18 @@ for coupon in coupons:
     p1 = json.loads(coupon.find('td', {'class': 'price height-column-with-price first-in-main-row coupone-width-1'})['data-sel'])['epr']
     p2 = json.loads(coupon.find('td', {'class': 'price height-column-with-price coupone-width-1'})['data-sel'])['epr']
 
-    data = {id_: {'name': members, 'odds': {'p1': round(float(p1), 2), 'p2': round(float(p2), 2)}}}
-    print(data)
+    data = {
+        "name": members,
+        "odds": {
+            time: {
+                "p1": round(float(p1), 2),
+                "p2": round(float(p2), 2)
+            }
+        }
+    }
+
+    r.set(id_, json.dumps(data))
+
     # print('-' * 80)
     # print('ID матча:')
     # print(json.loads(coupon['data-event-treeid']))
