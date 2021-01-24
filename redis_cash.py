@@ -1,3 +1,5 @@
+from typing import Dict, Any, Union
+
 from redis import Redis
 import requests
 from bs4 import BeautifulSoup as bs
@@ -5,7 +7,7 @@ from config import user_agent, URL_24H
 from pprint import pprint
 import json
 from datetime import datetime
-
+import time
 r = Redis(host='localhost', port=6379, db=0)
 
 data_test = {
@@ -34,48 +36,67 @@ name_members = soup.find('div', {'class': 'sport-category-content'}).find_all('d
 odd_p_1 = json.loads(coupons[0].find_all('td', {'class': 'price height-column-with-price first-in-main-row coupone-width-1'})[0]['data-sel'])['epr']  # отсюда можно вытащить все коэфициенты
 odd_p_2 = json.loads(coupons[0].find_all('td', {'class': 'price height-column-with-price coupone-width-1'})[0]['data-sel'])['epr']  # отсюда можно вытащить все коэфициенты
 
-step = 0
-
-for coupon in coupons:
-
-    id_ = coupon['data-event-treeid']
-    members = coupon['data-event-name']
-    time = str(datetime.now()).replace(" ", "")
-    p1 = json.loads(coupon.find('td', {'class': 'price height-column-with-price first-in-main-row coupone-width-1'})['data-sel'])['epr']
-    p2 = json.loads(coupon.find('td', {'class': 'price height-column-with-price coupone-width-1'})['data-sel'])['epr']
-
-    data = {
-        "name": members,
-        "odds": {
-            time: {
-                "p1": round(float(p1), 2),
-                "p2": round(float(p2), 2)
-            }
-        }
-    }
-
-    r.set(id_, json.dumps(data))
-
-    # print('-' * 80)
-    # print('ID матча:')
-    # print(json.loads(coupon['data-event-treeid']))
-    # print('Имя игроков:')
-    # print(coupon['data-event-name'])
-    # print('Текущее время:')
-    # print(datetime.now())
-    # print('Коэффициент П1')
-    # print(json.loads(coupon.find('td', {'class': 'price height-column-with-price first-in-main-row coupone-width-1'})['data-sel'])['epr'])
-    # print('Коэффициент П2')
-    # print(json.loads(coupon.find('td', {'class': 'price height-column-with-price coupone-width-1'})['data-sel'])['epr'])
-
-
-# step = 0
-# for _ in result:
-#     print('-' * 80)
-#     print(_)
-#     step = step + 1
+# -------------------------------------------------------------------------------------
+# for coupon in coupons:
 #
-# print(step)
+#     id_ = coupon['data-event-treeid']
+#     members = coupon['data-event-name']
+#     time = str(datetime.now()).replace(" ", "")
+#     p1 = json.loads(coupon.find('td', {'class': 'price height-column-with-price first-in-main-row coupone-width-1'})['data-sel'])['epr']
+#     p2 = json.loads(coupon.find('td', {'class': 'price height-column-with-price coupone-width-1'})['data-sel'])['epr']
+
+
+members = 'test'
+time_ = str(datetime.now()).replace(" ", "")
+id_ = 10890085
+p1 = 1.23
+p2 = 2.24
+r.set(id_, json.dumps(data_test))
+time.sleep(3)
+print(f'первичные данные = {r.get(id_)}')
+
+# match = eval(r.get(id_))
+# dict_new_odds = {time_: {"p1": p1, "p2": p2}}
+# r.set(id_, json.dumps(dict(match)['odds'].update(dict_new_odds)))
+# print(match['odds'].update({time_: {"p1": p1, "p2": p2}}))
+# r.set(id_, json.dumps(match['odds'].update({time_: {"p1": p1, "p2": p2}})))
+# time.sleep(0.01)
+#
+# print(eval(r.get(id_)))
+
+
+
+match = eval(r.get(id_))
+dict_new_odds = {time_: {"p1": p1, "p2": p2}}
+r.set(id_, json.dumps(dict(match)['odds'].update(dict_new_odds)))
+print(eval(r.get(id_)))
+
+
+
+#
+# if r.get(id_) is None:
+#     print(f'Первый сценарий')
+#
+#     data = {"name": members, "odds": {time_: {"p1": round(float(p1), 2), "p2": round(float(p2), 2)} } }
+#
+#     r.set(id_, json.dumps(data))
+#     print(f'Этого айди в базе не было, мы его добавили = {r.get(id_)}')
+# match = json.loads(r.get(id_))
+# print(f'match = {match}')
+# # dict_new_odds = {time_: {"p1": p1, "p2": p2}}
+# print(f"match по ключу odds = {dict(match)['odds']}")
+# # r.set(id_, json.dumps(dict(match)['odds'].update(dict_new_odds)))
+# print(match['odds'].update({time_: {"p1": p1, "p2": p2}}))
+# r.set(id_, json.dumps(match['odds'].update({time_: {"p1": p1, "p2": p2}})))
+# time.sleep(0.01)
+#
+# print(eval(r.get(id_)))
+
+# print(f'Вот что получилось = {r.get(id_)}')
+
+# 10890085
+
+# -------------------------------------------------------------------------------------
 
 
 

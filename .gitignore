@@ -6,7 +6,7 @@ venv
 *__pycache__
 *._*
 *.log
-
+redis_cash.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
